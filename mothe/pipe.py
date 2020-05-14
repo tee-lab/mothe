@@ -815,7 +815,7 @@ class mothe:
                   break
               elif k == ord('a'):
                   crop_img = img[iy-grab_size:iy+(grab_size),ix-grab_size:ix+(grab_size)]
-                  cv2.imwrite(path + "/"+ "yes" + "/{}{}.jpg".format("yes", counter), crop_img)
+                  cv2.imwrite(path + "/"+ self.class_name + "/{}{}.jpg".format(self.class_name, counter), crop_img)
                   cv2.circle(img,(ix,iy),int(grab_size*0.2),(0,255,0),-1)
           cv2.destroyAllWindows()
 
