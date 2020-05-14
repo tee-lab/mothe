@@ -802,7 +802,9 @@ class mothe:
           print("[UPDATING.....]{}th/{} frame detected and stored".format(i, nframe))
           cap.set(cv2.CAP_PROP_POS_FRAMES,i)
           ret, img = cap.read()
-          cv2.namedWindow(winname= "mothe_data")
+          cv2.namedWindow(winname= "mothe_data", cv2.WINDOW_NORMAL)
+          ww, wh, scale = mothe.scr_resize(img)
+          cv2.resizeWindow('image', ww, wh)
           cv2.setMouseCallback("mothe_data", draw_circle)
           counter = 0
           while(1):
@@ -814,7 +816,7 @@ class mothe:
               elif k == ord('a'):
                   crop_img = img[iy-grab_size:iy+(grab_size),ix-grab_size:ix+(grab_size)]
                   cv2.imwrite(path + "/"+ "yes" + "/{}{}.jpg".format("yes", counter), crop_img)
-                  cv2.circle(img,(ix,iy),grab_size*0.2,(0,255,0),-1)
+                  cv2.circle(img,(ix,iy),int(grab_size*0.2),(0,255,0),-1)
           cv2.destroyAllWindows()
 
 
