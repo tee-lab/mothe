@@ -802,7 +802,7 @@ class mothe:
           print("[UPDATING.....]{}th/{} frame detected and stored".format(i, nframe))
           cap.set(cv2.CAP_PROP_POS_FRAMES,i)
           ret, img = cap.read()
-          cv2.namedWindow(winname= "mothe_data", cv2.WINDOW_NORMAL)
+          cv2.namedWindow("mothe_data", cv2.WINDOW_NORMAL)
           ww, wh, scale = mothe.scr_resize(img)
           cv2.resizeWindow('image', ww, wh)
           cv2.setMouseCallback("mothe_data", draw_circle)
