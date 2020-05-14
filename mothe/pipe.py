@@ -39,15 +39,14 @@ class mothe:
         self.thresh_min = thresh_min
         self.thresh_max = thresh_max
 
-    def scr_resize(self, image_name):
-        self.image_name = image_name
+    def scr_resize(image_name):
         width, height = pyautogui.size()
-        scale_width = width/self.image_name.shape[1]
-        scale_height = height/self.image_name.shape[0]
+        scale_width = width/image_name.shape[1]
+        scale_height = height/image_name.shape[0]
         scale = min(scale_width, scale_height)
-        window_width = int(self.image_name.shape[1] * scale)
-        window_height = int(self.image_name.shape[0] * scale)
-        print(self.image_name.shape[0], self.image_name.shape[1])
+        window_width = int(image_name.shape[1] * scale)
+        window_height = int(image_name.shape[0] * scale)
+        print(image_name.shape[0], image_name.shape[1])
         return window_width, window_height, scale
 
 
