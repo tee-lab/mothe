@@ -23,7 +23,6 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.layers.normalization import BatchNormalization
 from keras.layers.advanced_activations import LeakyReLU
 import scipy
-from sklearn.utils.linear_assignment_ import linear_assignment
 from scipy.optimize import linear_sum_assignment
 import glob
 import time
@@ -31,6 +30,7 @@ import argparse
 from filterpy.kalman import KalmanFilter
 from filterpy.stats import mahalanobis
 import filterpy
+import pyautogui
 
 class mothe:
 
@@ -38,6 +38,18 @@ class mothe:
         self.root_path = root_path
         self.thresh_min = thresh_min
         self.thresh_max = thresh_max
+
+    def scr_resize(self, image_name):
+        self.image_name = image_name
+        width, height = pyautogui.size()
+        scale_width = width/self.image_name.shape[1]
+        scale_height = height/self.image_name.shape[0]
+        scale = min(scale_width, scale_height)
+        window_width = int(self.image_name.shape[1] * scale)
+        window_height = int(self.image_name.shape[0] * scale)
+        print(self.image_name.shape[0], self.image_name.shape[1])
+        return window_width, window_height, scale
+
 
     def set_config(self, movie_name):
         self.movie_name = movie_name
@@ -81,7 +93,9 @@ class mothe:
 
             ret, image = cap.read()
             clone = image.copy()
-            cv2.namedWindow("image")
+            cv2.namedWindow("image", cv2.WINDOW_NORMAL)
+            ww, wh, scale = mothe.scr_resize(image)
+            cv2.resizeWindow('image', ww, wh)
             cv2.setMouseCallback("image", click_and_crop)
             while True:
                 # display the image and wait for a keypress
@@ -100,10 +114,10 @@ class mothe:
             # from teh image and display it
             if len(refPt) == 2:
                 roi = clone[refPt[0][1]:refPt[1][1], refPt[0][0]:refPt[1][0]]
-                if (refPt[0][0]-refPt[0][1]) > (refPt[1][0]-refPt[1][1]):
-                    specifications.__setitem__('annotation_size', ((refPt[0][0]-refPt[0][1])/4))
+                if (refPt[1][0]-refPt[0][0]) > (refPt[1][1]-refPt[0][1]):
+                    specifications.__setitem__('annotation_size', ((refPt[1][0]-refPt[0][0])*scale))
                 else:
-                    specifications.__setitem__('annotation_size', ((refPt[1][0]-refPt[1][1])/4))
+                    specifications.__setitem__('annotation_size', ((refPt[1][1]-refPt[0][1])*scale))
                 cv2.imshow("ROI", roi)
                 cv2.waitKey(0)
 
@@ -336,6 +350,7 @@ class mothe:
         cap.release()
         out.release()
 
+
     class yolo:
         def _interval_overlap(interval_a, interval_b):
             x1, x2 = interval_a
@@ -492,7 +507,9 @@ class mothe:
                     iou_matrix[d,t] = mothe.yolo.bbox_iou(trackBox, det)
                     id_matrix[d,t] = scale_id*det[4]
 
-            matched_indices = linear_assignment(-iou_matrix-id_matrix)
+            matched_indices = linear_sum_assignment(-iou_matrix-id_matrix)
+            matched_indices = np.asarray(matched_indices)
+            matched_indices = np.transpose(matched_indices)
 
             unmatched_detections = []
             for d,det in enumerate(detections):
@@ -567,7 +584,7 @@ class mothe:
                 for t,trk in enumerate(self.trackers):
                     if(t in unmatched_trks):
 
-                        d = convert_kfx_to_bbox(trk.kf.x)[0]
+                        d = mothe.yolo.convert_kfx_to_bbox(trk.kf.x)[0]
                         d = np.append(d,np.array([2]), axis=0)
                         d = np.expand_dims(d,0)
                         dets = np.append(dets,d, axis=0)
@@ -813,9 +830,9 @@ class mothe:
 
 
 if __name__=="__main__":
-    mothe = mothe("/home/elcucuy/Desktop/mothe_library", 50, 200)
-    configuration = mothe.set_config("wasp_hd.MTS")
-    mothe.generate_dataset("wasp_hd.MTS", "yes")
-    mothe.train_model()
-    mothe.detection("wasp_hd.MTS", "wasp_model.h5py")
-    mothe.tracking("wasp_hd.MTS", "wasp_model.h5py")
+    mothe = mothe("/home/elcucuy/Desktop/teelab_mothe/mothe", 50, 150)
+    configuration = mothe.set_config("/home/elcucuy/main/iisc/short_clips/wasp_hd.MTS")
+    # mothe.generate_dataset("wasp_hd.MTS", "yes")
+    # mothe.train_model()
+    # mothe.detection("/home/elcucuy/main/iisc/short_clips/wasp_hd.MTS", "/home/elcucuy/main/iisc/fast_cnn_detection_testing/wasp_model.h5py")
+    mothe.tracking("/home/elcucuy/main/iisc/short_clips/wasp_hd.MTS", "wasp_model.h5py")
