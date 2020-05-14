@@ -209,8 +209,8 @@ class mothe:
 
         bb_train = bb_model.fit(train_X, train_label, batch_size=batch_size,epochs=epochs,verbose=1,validation_data=(valid_X, valid_label))
 
-        accuracy =bb_train.history['acc']
-        val_accuracy = bb_train.history['val_acc']
+        accuracy =bb_train.history['accuracy']
+        val_accuracy = bb_train.history['val_accuracy']
         loss = bb_train.history['loss']
         val_loss = bb_train.history['val_loss']
         epochs = range(len(accuracy))
