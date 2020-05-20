@@ -754,6 +754,10 @@ class mothe:
           save_output= True
           full_warp = np.eye(3, 3, dtype=np.float32)
 
+          for item in tracks:
+              data = data.append(pd.DataFrame({'uid': item[4], 'lx': item[0], 'by': item[1], 'rx' : item[2], 'ty' : item[3]}, index=[0]), ignore_index=True)
+              data.to_csv("track.csv")
+
           for ids in tracks:
             np.random.seed(int(ids[4])) # show each track as its own colour - note can't use np random number generator in this code
             r = np.random.randint(256)
