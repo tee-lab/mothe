@@ -343,9 +343,10 @@ class mothe:
 
           for item in pts:
             data = data.append(pd.DataFrame({'frame': i, 'x': item[0], 'y': item[1],}, index=[0]), ignore_index=True)
+            data.to_csv(path + "/detect.csv")
             cv2.rectangle(frame,(item[0]-grabsize, item[1]-grabsize), (item[0]+grabsize, item[1]+grabsize),(0,255,0),thickness = 2)
           out.write(frame)
-        data.to_csv(path + "detect.csv")
+
         cap.release()
         out.release()
 
