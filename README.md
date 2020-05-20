@@ -93,7 +93,7 @@ The 'mothe' library includes 5 methods that provide an end to end solution for t
 
    **_Mothe.detection("path/to/the/video/file", "path/to/the/trained/model")_**
 
-#IMPLEMENTATION SCREENSHOTS
+# IMPLEMENTATION SCREENSHOTS
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/1_create_mothe_directory.png">
@@ -102,5 +102,7 @@ The 'mothe' library includes 5 methods that provide an end to end solution for t
 Open the terminal and navigate to the desktop. Create a folder named "mothe" and navigate into this folder. Execute the following commands.
 
 **_cd Desktop_**
+
 **_mkdir mothe_**
+
 **_cd mothe_**
