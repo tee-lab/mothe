@@ -92,3 +92,15 @@ The 'mothe' library includes 5 methods that provide an end to end solution for t
    The video name or the video path corresponds to the video in which you would like to detect the objects. This method produces a csv file with framewise data of the individuals position. It also produces a video file containing the detections.
 
    **_Mothe.detection("path/to/the/video/file", "path/to/the/trained/model")_**
+
+#IMPLEMENTATION SCREENSHOTS
+
+<br>
+<img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/1_create_mothe_directory.png">
+<br>
+
+Open the terminal and navigate to the desktop. Create a folder named "mothe" and navigate into this folder. Execute the following commands.
+
+**_cd Desktop_**
+**_mkdir mothe_**
+**_cd mothe_**
