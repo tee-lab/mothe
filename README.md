@@ -35,65 +35,15 @@ The 'mothe' library includes 5 methods that provide an end to end solution for t
 5. __Object tracking__: Object tracking is the final goal of MOTHe. Unique ids are generated for all the detected objects. The ids are tracked through frames of the test video
    based on kalman filter. Few objects that go undetected for a few frames are reassigned with a new
    id. Additionnal individuals entering the frame are assigned a new id after detection.
+   
+**_NOTE: MOTHE DEPENDS ON VARIOUS OTHER MODULES FOR COMPUTATION AND IS SUBJECT TO MAINTENANCE OF THESE MODULES. THEREFORE, MAKE SURE TO KEEP YOUR OS UPDATED ALONG WITH THE PYTHON VERSION. FOR THIS REASON, IT IS ADVISED TO SET UP A PYTHON VIRTUAL ENVIRONMENT EXCLUSIVELY FOR MOTHE TO MAINTAIN A RUN ENVIRONMENT AND THE RIGHT MODULE VERSIONS. MOTHE HAS BEEN TESTED AND WORKS PERFECTLY ON UBUNTU 18.04 AND ABOVE WITH PYTHON 3.6 AND ABOVE.  _**
 
 
 # MOTHE IMPLEMENTATION
 
- __Users should first setup their system with mothe. To do this you simply have to use the pip package manager. Use the following command to install mothe.__
+**_THE MOUSE CALLBACK FUNCTIONS OF OPEN-CV DEPENDS ON Tkinter MODULE. PLEASE INSTALL IT BY USING THE FOLLOWING COMMAND IN THE TERMINAL_**
 
- **_pip install mothe_**
-
- 1. __Step 1__: Set a variable to contain the mothe object
-
-    To do this, call the mothe object and pass the 3 arguments
-    a. Path to the project folder
-    b. minimum threshold value (experimental. Suggested starting value is 50)
-    c. maximum threshold value (experimental. Suggested starting value is 200)
-
-    **_Mothe = mothe("path/to/the/project/folder", min_threshold, max_threshold)_**
-
- 2. __step 2__: Generate the configuration file by using the 'set_config()' method
-
-    Initiate the configuration by executing the following code snippet. The 'set_config()' method accepts 1 argument
-    a. path to the video file
-    A video file is required to determine the size of the bounding box. Ones the command is executed, a window with a frame from the selected video appears. The user is required to click and drag across the object of interest to set the size of the bounding box. On drawing the bounding box satisfactorily, press the 'c' button twice to save a configuration file in teh yaml format containing the root_path, min_threshold value, max_threshold value and size of the bounding box.
-
-    **_Mothe.set_config("path/to/video")_**
-
- 3. __step 3__: Generate the dataset using the 'generate_dataset()' method
-
-    To generate the dataset, execute the following code. The 'generate_dataset()' method takes 2 Arguments
-    a. path to the video
-    b. class name ("yes" or "no")
-    When the code is executed, a window appears with a frame of the video selected. to generate data, single click at the centre of the object of interest and press the 'a' button. The object gets cropped and stored in the folder bearing the class name provided as an argument to the method. A marker also appears on the selected object for confirmation on the pressing of the 'a' button. When the whole frame is covered, press the 'esc' key to move to the next frame. Generate data this way for both the classes.
-
-    **_Mothe.generate_dataset("path/to/video", "class_name")_**
-
- 4. __step 4__: Train the neural network using the 'train_model()' method
-
-    Use the following code to train the neural network using the generated dataset. A trained model is produced and stored in the project folder which is used to detect and track the objects of interest. This method needs no argument.
-
-    **_Mothe.train_model()_**
-
- 5. __step 5__: Track multiple objects with unique ids using the 'tracking()' method
-
-    Execute the following code to initiate the tracking process. The tracking method takes 2 Arguments
-    a. video name
-    b. model name
-    The video name or the video path corresponds to the video in which you would like to track the objects. This method produces a csv file with framewise data of the individuals position and associated unique ids. It also produces a video file containing the tracks.
-
-    **_Mothe.tracking("path/to/the/video/file", "path/to/the/trained/model")_**
-
-6. __step 6__: Detect multiple objects using the 'detection()' method
-
-   Execute the following code to initiate the detection process. The detection method takes 2 Arguments
-   a. video name
-   b. model name
-   The video name or the video path corresponds to the video in which you would like to detect the objects. This method produces a csv file with framewise data of the individuals position. It also produces a video file containing the detections.
-
-   **_Mothe.detection("path/to/the/video/file", "path/to/the/trained/model")_**
-
-# IMPLEMENTATION SCREENSHOTS
+**_sudo apt-get install python3-tk python3-dev_**
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/1_create_mothe_directory.png">
