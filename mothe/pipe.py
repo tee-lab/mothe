@@ -1,4 +1,5 @@
 from __future__ import print_function
+from sklearn.model_selection import train_test_split
 import yaml
 import os
 import sys
@@ -15,7 +16,6 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import to_categorical
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
 import keras
 from keras.models import Sequential,Input,Model
 from keras.layers import Dense, Dropout, Flatten
