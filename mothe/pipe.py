@@ -38,7 +38,7 @@ class mothe:
         self.root_path = root_path
         self.thresh_min = thresh_min
         self.thresh_max = thresh_max
-
+    @staticmethod
     def scr_resize(image_name):
         width, height = pyautogui.size()
         scale_width = width/image_name.shape[1]
@@ -81,7 +81,8 @@ class mothe:
 
         # Add the dimensions of the bounding box based on user requirement
         movieName =  self.movie_name
-        cap = cv2.VideoCapture(movieName)
+        cap = cv2.VideoCapture(root_dir + "/" + movieName)
+        print(root_dir + "/" + movieName)
         i=0
         steps=50
         nframe =cap.get(cv2.CAP_PROP_FRAME_COUNT)
@@ -270,6 +271,8 @@ class mothe:
           print("[UPDATING.....]{}th frame detected and stored".format(i))
           cap.set(cv2.CAP_PROP_POS_FRAMES,i)
           ret, frame = cap.read()
+          if ret == False:
+              continue
           grayF = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
           #Equalize image
           #gray = cv2.equalizeHist(gray)
@@ -346,7 +349,7 @@ class mothe:
             data.to_csv(path + "/detect.csv")
             cv2.rectangle(frame,(item[0]-grabsize, item[1]-grabsize), (item[0]+grabsize, item[1]+grabsize),(0,255,0),thickness = 2)
           out.write(frame)
-
+        print("...SUCCESSFULLY DETECTED {} AND STORED mothe_detect.avi AND CSV...".format(self.movie_name))
         cap.release()
         out.release()
 
@@ -649,7 +652,7 @@ class mothe:
         from keras.models import load_model
         bb_model = load_model(root_dir+ "/" + self.model_name)
         #Video writer object
-        out = cv2.VideoWriter(root_dir+'/video_track.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 24, (nx,ny))
+        out = cv2.VideoWriter(root_dir+'/mothe_track.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 24, (nx,ny))
         tracker = mothe.yolo.yoloTracker(max_age=20, track_threshold=0.6, init_threshold=0.8, init_nms=0.0, link_iou=0.1)
 
         #Define a distance function
@@ -669,6 +672,8 @@ class mothe:
           print("[UPDATING.....]{}th/{} frame detected and stored".format(i, nframe))
           cap.set(cv2.CAP_PROP_POS_FRAMES,i)
           ret, frame = cap.read()
+          if ret == False:
+              continue
           grayF = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
           #Equalize image
           #gray = cv2.equalizeHist(gray)
@@ -780,49 +785,72 @@ class mothe:
         data['by']=by
         data['id']=uid
         data.to_csv("video_track.csv")
+        print("...SUCCESSFULLY TRACKED {} AND STORED mothe_track.avi AND CSV...".format(self.movie_name))
+
         cap.release()
         out.release()
 
     def generate_dataset(self, movie_name, class_name):
         self.movie_name = movie_name
         self.class_name = class_name
-
-        def draw_circle(event, x, y, flags, param):
-            global ix, iy
-            if event == cv2.EVENT_LBUTTONDOWN:
-                ix, iy = x, y
-        if self.class_name not in os.listdir():
-            os.mkdir(self.class_name)
         with open("config.yml", "r") as stream:
             config_data= yaml.safe_load(stream)
         path = config_data["root_dir"]
         grab_size = int(config_data["annotation_size"])
-        movieName = self.movie_name
-        cap = cv2.VideoCapture(movieName)
-        nframe =cap.get(cv2.CAP_PROP_FRAME_COUNT)
-        i=0
-        steps= nframe/20
-        while(cap.isOpened() & (i<(nframe-steps))):
-          i = i + steps
-          print("[UPDATING.....]{}th/{} frame detected and stored".format(i, nframe))
-          cap.set(cv2.CAP_PROP_POS_FRAMES,i)
-          ret, img = cap.read()
-          cv2.namedWindow("mothe_data", cv2.WINDOW_NORMAL)
-          ww, wh, scale = mothe.scr_resize(img)
-          cv2.resizeWindow('image', ww, wh)
-          cv2.setMouseCallback("mothe_data", draw_circle)
-          counter = 0
-          while(1):
-              counter+=1
-              cv2.imshow("mothe_data", img)
-              k = cv2.waitKey(20) & 0xFF
-              if k == 27:
-                  break
-              elif k == ord('a'):
-                  crop_img = img[iy-grab_size:iy+(grab_size),ix-grab_size:ix+(grab_size)]
-                  cv2.imwrite(path + "/"+ self.class_name + "/{}{}.jpg".format(self.class_name, counter), crop_img)
-                  cv2.circle(img,(ix,iy),int(grab_size*0.2),(0,255,0),-1)
-          cv2.destroyAllWindows()
+        ix, iy = -1, -1
+        def click_crop(event, x, y, flags, param):
+            global ix, iy
+            if event == cv2.EVENT_LBUTTONDOWN:
+                ix, iy = x, y
+                keypoints.append((ix, iy)) 
+        if self.class_name not in os.listdir():
+            os.mkdir(self.class_name)     
+        cap = cv2.VideoCapture(path+ "/" + self.movie_name)
+        nframes =cap.get(cv2.CAP_PROP_FRAME_COUNT)          
+        i = 0
+        while cap.isOpened() and i<(nframes-1):
+            i=i+1
+            print("...PROCESSING {}/{} FRAME...".format(i, nframes))
+            cap.set(cv2.CAP_PROP_POS_FRAMES, i)
+            ret, frame = cap.read()
+            if ret == False:
+                continue
+            clone = frame.copy()
+            cv2.namedWindow("image", cv2.WINDOW_NORMAL)
+            cv2.resizeWindow("image", 1920, 1080)
+            cv2.setMouseCallback("image", click_crop)
+            keypoints = []
+            while True:
+                cv2.imshow("image", clone)
+                key = cv2.waitKey(20) & 0xFF
+                if key == ord("n"):
+                    break 
+                elif key == ord("u"):
+                    if len(keypoints)==0:
+                        print("...NO POINTS HAVE BEEN SELECTED...")
+                        break
+                    else:
+                        print("...DELETED POINT {}".format(keypoints[-1]))
+                        keypoints.pop(-1)
+                        print(keypoints)
+                        clone = frame.copy()
+                        for point in keypoints:
+                            cv2.circle(clone, point, grab_size, (0, 255, 0), 2)
+                elif key == 27:
+                    i = (nframes)
+                    print("...GENERATION TERMINATED...")
+                    break
+                elif key == ord("s"):
+                    print("...SAVING {} DATA POINTS FROM {} FRAME...".format(len(keypoints), i))
+                    for (enum,keys) in enumerate(keypoints):
+                        crop_img = frame[keys[1]-grab_size:keys[1]+(grab_size),keys[0]-grab_size:keys[0]+(grab_size)]
+                        cv2.imwrite(path + "/" + self.class_name + "/" + "{}-{}-f{}-k{}.jpg".format(self.movie_name, self.class_name, i, enum), crop_img)
+                    break
+                for point in keypoints:
+                    cv2.circle(clone, point, grab_size, (0, 255, 0), 2)
+            cv2.destroyAllWindows()
+
+    
 
 
 
@@ -836,9 +864,9 @@ class mothe:
 
 
 if __name__=="__main__":
-    mothe = mothe("/home/elcucuy/Desktop/teelab_mothe/mothe", 50, 150)
-    configuration = mothe.set_config("/home/elcucuy/main/iisc/short_clips/wasp_hd.MTS")
-    # mothe.generate_dataset("wasp_hd.MTS", "yes")
+    mothe = mothe("/home/elcucuy/mothe/teelab/mothe/mothe", 50, 150)
+    # configuration = mothe.set_config("wasp_original.MTS")
+    # mothe.generate_dataset("wasp_original.MTS", "yes")
     # mothe.train_model()
-    # mothe.detection("/home/elcucuy/main/iisc/short_clips/wasp_hd.MTS", "/home/elcucuy/main/iisc/fast_cnn_detection_testing/wasp_model.h5py")
-    mothe.tracking("/home/elcucuy/main/iisc/short_clips/wasp_hd.MTS", "wasp_model.h5py")
+    # mothe.detection("wasp_original.MTS", "wasp_model.h5py")
+    mothe.tracking("wasp_original.MTS", "wasp_model.h5py")
