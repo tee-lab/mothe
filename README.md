@@ -1,11 +1,18 @@
-# MOTHe
-'mothe' is a pipeline developed to detect and track multiple objects in a heterogeneous environment. MOTHe is based on a simple
-Convolutional neural network and allows users to generate training data using a simple GUI tool, automatically        detects
-classified objects and tracks them. MOTHe is designed to be generic which empoweres the user to track      any
-objects of interest in a natural setting.
+## MOTHe
+Mothe is a pipeline developed to detect and track multiple animals in a heterogeneous environment. MOTHe is a python based repository and it uses Convolutional Neural Network (CNN) architecture for the object detection task. It takes a digital image as an input and reads its features to assign a category. These algorithms are learning algorithms which means that they extract features from the images by using huge amounts of labeled training data. Once the CNN models are trained, these models can be used to classify novel data (images). MOTHe is designed to be generic which empowers the user to track objects of interest even in a natural setting.
 
-__MOTHe has been developed and tested on Ubuntu 16.04 and above using python 3.6.9__
-# PIPELINE DESCRIPTION:
+## WARNING
+
+*__WARNING: MOTHe uses several methods which have either been moved or changed. It is important to be aware of the versions that we download/install. The recommended python versions are the python3.6 to python3.7 stable releases (The latest LTS versions of linux (ex: Ubuntu 20.04 Focal Fossa) are installed with a stock python3.8 which is not compatible with MOTHe). Python3.8 does not support Tensorflow versions below the 2.2 releases which are required by MOTHe to work. Please note the versions of some libraries that are modified rather quickly and are used to test MOTHe very recently.__*
+
+1. Tensorflow: 2.1.0
+2. Keras: 2.3.1
+3. sklearn: 0.23.1
+*__If the environment has the wrong versions installed, just reinstall the package using pip3 and specifying the correct versions as shown below.__*
+
+*__pip3 install tensorflow==2.1.0__*
+
+## PIPELINE DESCRIPTION:
 
 The 'mothe' library includes 5 methods that provide an end to end solution for tracking multiple objects in a heterogeneous environment. It includes methods to setup configuration, dataset generation, training the CNN, multiple object detection and object tracking.
 
@@ -232,3 +239,42 @@ Initiate the tracking process by using the following command. Make sure to enter
 <br>
 
 After the successful tracking, a tracking video and csv are generated in the mothe folder.
+
+## HOW MUCH TRAINING DATA DO I NEED?
+
+MOTHe uses a CNN which uses a set of labelled examples to learn the features of the objects. Neural Networks generally work well with huge number of training samples. We recommend using at least 8-10k image examples for the animal category. This number may need to be increased if the animal of interest shows a lot of variation in morphology. For example, if males and females are of different colors, it is important to include sufficient examples for both of them. Similarly, if the background is too heterogeneous then you may need more training data (around 1500-2000 samples for different types of variations in the background).
+For example to train the MOTHe on our blackbuck videos, we used 9800 cropped samples for blackbuck (including males and females) and 19000 samples for the background because background included grass, soil, rocks, bushes, water etc.
+
+
+## CHOOSING COLOR THRESHOLDS
+
+The object detection steps requires user to enter threshold values in the config files. Object detection in MOTHe works in two steps, it first uses a color filter to identify the regions in the image on which to run the classification. We use color threshold to select these regions. You can see the values of thresholds for blackbuck and wasp videos in the *config.yml* file.
+If you are running MOTHe on a new dataset, there are two ways to select appropriate threshold values:
+
+1. You may open some frames from different videos in an interactive viewer (for example MATLAB image display), you can then click on the pixels on animal and check the RGB values (take the avergae of all 3 channels). Looking at these values in multiple instances will give you an idea to choose a starting minimum and maximum threshold. 
+Run the detection with these thresholds and you can improve the detection by hit and trial method to tweak the threshold.
+
+2. You can compare your videos to wasp and blackbuck videos and start with threshold values to which your data is more similar. For example, if your animal looks more similar to blackbuck in color and lighting conditions, you may start with default thresholds and improve the detection by changing lower and upper threshold by little amount at a time.
+
+
+## USING ON WINDOWS
+Using windows to implement MOTHe is easier than the linux counterpart. There are TWO options for implementing with windows.
+
+1. Using an environment such as anaconda.
+Anaconda helps in installing packages from the Pypi repository easily and also contains useful tools such as spyder(Text editor for python projects) and jupyter notebooks for experimenting with the Mothe library. Use the following link to download anaconda and get it up and running. It provides clear documentation on how to install pypi packages in the environment.
+*__https://docs.anaconda.com/anaconda/install/windows/_**
+
+2. Installing python3 and pip package manager.
+Downloading and installing python3 and the pip package manager is the __recommended option__ since it is quick and easy for controlling the versions. Use the following links to download and install python3 and pip package manager.
+*__https://www.python.org/downloads/windows/__*
+*__https://www.liquidweb.com/kb/install-pip-windows/__*
+
+*__WARNING: MOTHe uses several methods which have either been moved or changed. It is important to be aware of the versions that we download/install. The recommended python versions are the python3.6 to python3.7 stable releases. Python3.8 does not support Tensorflow versions below the 2.2 releases which are required by MOTHe to work. Please note the versions of some libraries that are modified rather quickly and are used to test MOTHe very recently.__*
+
+1. Tensorflow: 2.1.0
+2. Keras: 2.3.1
+3. sklearn: 0.23.1
+*__If the environment has the wrong versions installed, just reinstall the package using pip3 and specifying the correct versions as shown below.__*
+
+*__pip3 install tensorflow==2.1.0__*
+
