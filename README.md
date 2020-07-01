@@ -8,9 +8,43 @@ Mothe is a pipeline developed to detect and track multiple animals in a heteroge
 1. Tensorflow: 2.1.0
 2. Keras: 2.3.1
 3. sklearn: 0.23.1
+
 *__If the environment has the wrong versions installed, just reinstall the package using pip3 and specifying the correct versions as shown below.__*
 
 *__pip3 install tensorflow==2.1.0__*
+
+## VIRTUAL ENVIRONMENT SETUP
+
+*__QUICK TIP: Consider setting up a virtual environment which makes handling the required packages easy. Consider the case of having a fresh Ubuntu 20.04 inatall which boasts a python 3.8 integration by default. Installing a stable version of python is nessasary. Virtual environments help us to maintain multiple environments on the same system and find the setup that works best. Follow the instructions below to setup a virtual environment.__*
+
+1. Install the python3-dev and the python3-tk modules required for mothe using the following commands.
+*__sudo apt-get install python3-dev__*
+*__sudo apt-get install python3-tk__*
+
+*__If a new version of python is installed, ex: python3.6 along with the existing python3.8 stock install, the packages should be installed as follows__*
+*__sudo apt-get install python3.6-dev__*
+*__sudo apt-get install python3.6-tk__*
+
+2. Install virtualenv and virtualenvwrapper using the pip3 package manager
+*__sudo pip3 install virtualenv virtualenvwrapper__*
+
+3. Execute the following FOUR commands one after the other in the terminal to update the .bashrc file
+*__echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc__*
+*__echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc__*
+*__echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc__*
+*__echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc__*
+
+4. After updating the .bashrc file, we need to source it to apply the changes using the following command
+*__source ~/.bashrc__*
+
+5. After setting up the virtualenv and virtualenvwrapper, create a virtualenv using the following command. Be aware of the python version used for creating this environment. Ex: If we have installed python3.6, the version should be pointed towards python3.6
+*__mkvirtualenv mothe -p python3.6__*
+
+6. After creating the virtual environment, we need to activate it before working on it. Activate the environment using the following command
+*__workon mothe__*
+
+7. Once we are in the mothe virtual environment, install mothe using the pip package manager as shown below
+*__pip install mothe__*
 
 ## PIPELINE DESCRIPTION:
 
@@ -41,10 +75,7 @@ The 'mothe' library includes 5 methods that provide an end to end solution for t
 
 5. __Object tracking__: Object tracking is the final goal of MOTHe. Unique ids are generated for all the detected objects. The ids are tracked through frames of the test video
    based on kalman filter. Few objects that go undetected for a few frames are reassigned with a new
-   id. Additionnal individuals entering the frame are assigned a new id after detection.
-   
-**_NOTE: MOTHE DEPENDS ON VARIOUS OTHER MODULES FOR COMPUTATION AND IS SUBJECT TO MAINTENANCE OF THESE MODULES. THEREFORE, MAKE SURE TO KEEP YOUR OS UPDATED ALONG WITH THE PYTHON VERSION. FOR THIS REASON, IT IS ADVISED TO SET UP A PYTHON VIRTUAL ENVIRONMENT EXCLUSIVELY FOR MOTHE TO MAINTAIN A RUN ENVIRONMENT AND THE RIGHT MODULE VERSIONS. MOTHE HAS BEEN TESTED AND WORKS PERFECTLY ON UBUNTU 18.04 AND ABOVE WITH PYTHON 3.6 AND ABOVE.  _**
-
+   id. Additionnal individuals entering the frame are assigned a new id after detection.   
 
 # MOTHE IMPLEMENTATION
 
@@ -268,6 +299,11 @@ Anaconda helps in installing packages from the Pypi repository easily and also c
 Downloading and installing python3 and the pip package manager is the __recommended option__ since it is quick and easy for controlling the versions. Use the following links to download and install python3 and pip package manager.
 *__https://www.python.org/downloads/windows/__*
 *__https://www.liquidweb.com/kb/install-pip-windows/__*
+
+3. Install mothe using the pip package manager
+Use the following command to install mothe
+*__pip3 install mothe__* / *__pip install mothe__*
+(Depending on whether we are in a virtualenv or on system)
 
 *__WARNING: MOTHe uses several methods which have either been moved or changed. It is important to be aware of the versions that we download/install. The recommended python versions are the python3.6 to python3.7 stable releases. Python3.8 does not support Tensorflow versions below the 2.2 releases which are required by MOTHe to work. Please note the versions of some libraries that are modified rather quickly and are used to test MOTHe very recently.__*
 
