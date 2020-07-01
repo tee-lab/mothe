@@ -211,7 +211,7 @@ A window appears which is a frame of the video you have chosen. Start generating
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/15_click_and_press_a.png">
 <br>
 
-Click at the center of the animal once. The algorithm calculates the size of the bounding box based on the config file entry. The press the 'a' button ones to crop and store the animal. Then click on the next animal. A green marker appears on the previous animal to suggest it has already been cropped. Repeat the process to store all the animal examples.
+Click at the center of the animal once. The algorithm calculates the size of the bounding box based on the config file entry. Press the 's' button ones to crop and store the animals once we have selected all the animals in the frame. Then it will take us to the next frame automatically. Press the 'n' button to proceed to the next frame if the current frame is not worth collecting data from. Any selected animals are not cropped and stored if 'n' key is pressed. It just takes us to the next frame. Press the 'u' button if you want to undo a perticular selection that you have made.
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/16_creates_class_folder.png">
