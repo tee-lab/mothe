@@ -18,32 +18,45 @@ Mothe is a pipeline developed to detect and track multiple animals in a heteroge
 *__QUICK TIP: Consider setting up a virtual environment which makes handling the required packages easy. Consider the case of having a fresh Ubuntu 20.04 inatall which boasts a python 3.8 integration by default. Installing a stable version of python is nessasary. Virtual environments help us to maintain multiple environments on the same system and find the setup that works best. Follow the instructions below to setup a virtual environment.__*
 
 1. Install the python3-dev and the python3-tk modules required for mothe using the following commands.
+
 *__sudo apt-get install python3-dev__*
+
 *__sudo apt-get install python3-tk__*
 
 *__If a new version of python is installed, ex: python3.6 along with the existing python3.8 stock install, the packages should be installed as follows__*
+
 *__sudo apt-get install python3.6-dev__*
+
 *__sudo apt-get install python3.6-tk__*
 
 2. Install virtualenv and virtualenvwrapper using the pip3 package manager
+
 *__sudo pip3 install virtualenv virtualenvwrapper__*
 
 3. Execute the following FOUR commands one after the other in the terminal to update the .bashrc file
+
 *__echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc__*
+
 *__echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc__*
+
 *__echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc__*
+
 *__echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc__*
 
 4. After updating the .bashrc file, we need to source it to apply the changes using the following command
+
 *__source ~/.bashrc__*
 
 5. After setting up the virtualenv and virtualenvwrapper, create a virtualenv using the following command. Be aware of the python version used for creating this environment. Ex: If we have installed python3.6, the version should be pointed towards python3.6
+
 *__mkvirtualenv mothe -p python3.6__*
 
 6. After creating the virtual environment, we need to activate it before working on it. Activate the environment using the following command
+
 *__workon mothe__*
 
 7. Once we are in the mothe virtual environment, install mothe using the pip package manager as shown below
+
 *__pip install mothe__*
 
 ## PIPELINE DESCRIPTION:
