@@ -139,7 +139,7 @@ In the python shell, import the mothe module by executing the following command.
 
 Create a mothe instance/object by initializing mothe using the following command. The min and max threshold values depends on the specific case study and maytake a few tril and error attempts to get right. For the black buck videos, we have chosen 0 and 150 as the min and max threshold values and 150 and 250 for the wasp videos.
 
-**_mothe = mothe("path/to/the/project/folder", min_threshold, max_threshold)_**
+**_mothe = mothe("path/to/the/project/folder", min_threshold, max_threshold, step_size_for_detection_and_tracking)_**
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/8_set_configuration.png">
@@ -228,7 +228,7 @@ Start training the neural network using the generated data by executing the foll
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/20_post_training_graphs.png">
 <br>
 
-After successfully training the model, two graphs appear on the screen. 
+After successfully training the model, two graphs appear on the screen. The loss graph starts at a higher point and if the correct learning rate is applied, it takes a drastic decline and starts to plateau out as it reaches near zero. If a very high learning rate is applied, the graph starts travelling upwards instead of downwards. If a slightly higher learning rate is applied, it will not reack a closer point towards the zero line. The accuracy curve should travel upwards sharply and plateau out. It is important to avoid over fitting of data. This can be done by using adequate variance in the examples we generate during data generation. It is also important not to have too much variance since the accuracy may go down even though the network can generalize fairly well. For this stage, please use the link provided below to use the already generated data to train the network. 
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/21_stores_model.png">
@@ -241,7 +241,7 @@ After training, the model gets stored in the mothe directory as 'mothe_model.h5p
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/22_start_detection.png">
 <br>
 
-Initiate the detection process by using the following command. Make sure to enter the name of a test video and the correct model name as arguments.
+Initiate the detection process by using the following command. Make sure to enter the name of a test video and the correct model name as arguments. Please use the link provided below to use an already trained model. Rename the model and provide the same in the argument section of the detection method.
 
 **_mothe.detection("path/to/the/video/file", "path/to/the/trained/model")_**
 
@@ -256,7 +256,7 @@ After the successful detection, a detection video and csv are generated in the m
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/24_start_tracking.png">
 <br>
 
-Initiate the tracking process by using the following command. Make sure to enter the name of a test video and the correct model name as arguments.
+Initiate the tracking process by using the following command. Make sure to enter the name of a test video and the correct model name as arguments. The model used here is the same model that is used by the detection step.
 
 **_mothe.tracking("path/to/the/video/file", "path/to/the/trained/model")_**
 
