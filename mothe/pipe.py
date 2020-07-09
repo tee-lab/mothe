@@ -34,10 +34,11 @@ import pyautogui
 
 class mothe:
 
-    def __init__(self, root_path, thresh_min, thresh_max):
+    def __init__(self, root_path, thresh_min, thresh_max, step_for_dt):
         self.root_path = root_path
         self.thresh_min = thresh_min
         self.thresh_max = thresh_max
+        self.step_for_dt = step_for_dt
     @staticmethod
     def scr_resize(image_name):
         width, height = pyautogui.size()
@@ -78,11 +79,12 @@ class mothe:
         specifications= {}
         root_dir= self.root_path
         specifications.__setitem__('root_dir', root_dir)
+        step_for_dt= self.step_for_dt
+        specifications.__setitem__('step_for_dt', step_for_dt)
 
         # Add the dimensions of the bounding box based on user requirement
         movieName =  self.movie_name
         cap = cv2.VideoCapture(root_dir + "/" + movieName)
-        print(root_dir + "/" + movieName)
         i=0
         steps=50
         nframe =cap.get(cv2.CAP_PROP_FRAME_COUNT)
@@ -238,6 +240,7 @@ class mothe:
         grabsize = (int(config_data["annotation_size"]))
         threshold_value1 = (int(config_data["threshold_value1"]))
         threshold_value2 = (int(config_data["threshold_value2"]))
+        steps = (int(config_data["step_for_dt"]))
         #get screen resolution
         # screen_width = int(root.winfo_screenwidth())
         # screen_height = int(root.winfo_screenheight())
@@ -255,7 +258,6 @@ class mothe:
         data = pd.DataFrame([])
         i=0
         row = 0
-        steps=1
         alt = 100#int(input("Enter height of video(integer):  "))
         # work out size of box if box if 32x32 at 100m
         #grabSize = int(m.ceil((100/alt)*12))
@@ -628,6 +630,7 @@ class mothe:
         grabsize = int(config_data["annotation_size"])
         threshold_value1 = (int(config_data["threshold_value1"]))
         threshold_value2 = (int(config_data["threshold_value2"]))
+        steps = int(config_data["step_for_dt"])
 
         #get screen resolution
         # screen_width = int(root.winfo_screenwidth())
@@ -644,7 +647,6 @@ class mothe:
         data = pd.DataFrame(columns= ['frame', 'lx', 'ty', 'rx', 'by', 'id'])
         i=0
         row = 0
-        steps=1
         alt = 100#int(input("Enter height of video(integer):  "))
         # work out size of box if box if 32x32 at 100m
         grabSize = int(m.ceil((100/alt)*12))
@@ -790,9 +792,10 @@ class mothe:
         cap.release()
         out.release()
 
-    def generate_dataset(self, movie_name, class_name):
+    def generate_dataset(self, movie_name, class_name, step_for_dg):
         self.movie_name = movie_name
         self.class_name = class_name
+        self.step_for_dg = step_for_dg
         with open("config.yml", "r") as stream:
             config_data= yaml.safe_load(stream)
         path = config_data["root_dir"]
@@ -808,8 +811,9 @@ class mothe:
         cap = cv2.VideoCapture(path+ "/" + self.movie_name)
         nframes =cap.get(cv2.CAP_PROP_FRAME_COUNT)          
         i = 0
-        while cap.isOpened() and i<(nframes-1):
-            i=i+1
+        steps = int(self.step_for_dg)
+        while cap.isOpened() and i<(nframes-steps):
+            i=i+steps
             print("...PROCESSING {}/{} FRAME...".format(i, nframes))
             cap.set(cv2.CAP_PROP_POS_FRAMES, i)
             ret, frame = cap.read()
@@ -864,9 +868,9 @@ class mothe:
 
 
 if __name__=="__main__":
-    mothe = mothe("/home/elcucuy/mothe/teelab/mothe/mothe", 50, 150)
-    # configuration = mothe.set_config("wasp_original.MTS")
-    # mothe.generate_dataset("wasp_original.MTS", "yes")
+    mothe = mothe("/home/elcucuy/mothe/mothe", 50, 150, 15)
+    # configuration = mothe.set_config("/wasp_original.MTS")
+    # mothe.generate_dataset("wasp_original.MTS", "yes", 15)
     # mothe.train_model()
-    # mothe.detection("wasp_original.MTS", "wasp_model.h5py")
+    mothe.detection("wasp_original.MTS", "wasp_model.h5py")
     mothe.tracking("wasp_original.MTS", "wasp_model.h5py")
