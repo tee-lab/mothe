@@ -1,153 +1,165 @@
 ## MOTHe
 Mothe is a pipeline developed to detect and track multiple animals in a heterogeneous environment. MOTHe is a python based repository and it uses Convolutional Neural Network (CNN) architecture for the object detection task. It takes a digital image as an input and reads its features to assign a category. These algorithms are learning algorithms which means that they extract features from the images by using huge amounts of labeled training data. Once the CNN models are trained, these models can be used to classify novel data (images). MOTHe is designed to be generic which empowers the user to track objects of interest even in a natural setting.
 
-## IMPORTANT NOTE
+__MOTHe can be used on both Linux and windows operating systems. We have provided instructions for the windows system separately at the end of this page.__
 
-*__MOTHe uses several methods which have either been moved or changed. It is important to be aware of the versions that we download/install. The recommended python versions are the python3.6 to python3.7 stable releases (The latest LTS versions of linux (ex: Ubuntu 20.04 Focal Fossa) are installed with a stock python3.8 which is not compatible with MOTHe). Python3.8 does not support Tensorflow versions below the 2.2 releases which are required by MOTHe to work. Please note the versions of some libraries that are modified rather quickly and are used to test MOTHe very recently.__*
+## PIPELINE DESCRIPTION:
+
+MOTHe can automate all the tasks associated with object classification and is divided into 5 methods (one command line for each method) dedicated to the following tasks:
+
+1. __System configuration__: The system configuration is used to setup MOTHe on the users system. Basic details such as the path to the local repository, path to the video to be processed, the size of the individial to be cropped, number of frames to skip while running detection or tracking (to reduce compute time/to run a test case) and the size of the bounding box to be drawn during the detection phase.
+
+2. __Dataset generation__: The dataset generation is a crucial step towards object detection and tracking. The manual effort required to generate the required amount of training data is huge. The data generation class and executable highly automates the process by allowing the user to crop the region of interest by simple clicks over a GUI and automatically saves the images in the appropriate folders.
+
+3. __Training the convolutional neural networktrain_model__: After generating sufficient number of training example, the data is used to train the neural network. The neural network produces a classifier as the output. The accuracy of the classifier is dependent on how well the network is trainied, which in turn depends on the quality and quantity of training data (See section __How much training data do I need?__). The various tuning parameters of the network are fixed to render the process easy for the users. This network works well for binary classification - object of interest (animals) and background. Multi-class classification is not supported on this pipeline.
+
+4. __Object detection__: This method performs two key tasks - it first identifies the regions in the image which can potentially have animals, this is called localisation; then it performs classification on the cropped regions. This classification is done using a small CNN (6 convolutional layers). Output is in the form of *.csv* files which contains the locations of the identified animals in each frame.
+
+5. __Object tracking__: Object tracking is the final goal of the MOTHe. This module assigns unique IDs to the detected individuals and generates their trajectories. We have separated detection and tracking modules, so that it can also be used by someone interested only in the count data (eg. surveys). This modularisation also provides flexibility of using more sophisticated tracking algorithms to the experienced programmers. We use an existing code for the tracking task (from the Github page of ref). This algorithm uses Kalman filters and Hungarian algorithm. This script can be run once the detections are generated in the previous step. Output is a \text{.csv} file which contains individual IDs and locations for each frame. A video output with the unique IDs on each individual is also generated.
+
+## Setting-up MOTHe on Linux
+
+### IMPORTANT NOTE
+
+MOTHe is a python package which uses several other python libraries which might have been updated. Therefore, it is important to be aware of the versions that we download/install. The recommended python versions are the python3.6 to python3.7 stable releases (The latest LTS versions of linux (ex: Ubuntu 20.04 Focal Fossa) are installed with a stock python3.8 which is not compatible with MOTHe). Python3.8 does not support Tensorflow versions below the 2.2 releases which are required by MOTHe to work. Please note the versions of some libraries that are modified rather quickly and are used to test MOTHe very recently:
 
 1. Tensorflow: 2.1.0
 2. Keras: 2.3.1
 3. sklearn: 0.23.1
 
-*__If the environment has the wrong versions installed, just reinstall the package using pip3 and specifying the correct versions as shown below.__*
+__If the environment has the wrong versions installed, just reinstall the package using pip3 and specifying the correct versions as shown below.__
 
-*__pip3 install tensorflow==2.1.0__*
+`$ pip3 install tensorflow==2.1.0`
 
-## VIRTUAL ENVIRONMENT SETUP
+### VIRTUAL ENVIRONMENT SETUP
 
-*__QUICK TIP: Consider setting up a virtual environment which makes handling the required packages easy. Consider the case of having a fresh Ubuntu 20.04 inatall which boasts a python 3.8 integration by default. Installing a stable version of python is nessasary. Virtual environments help us to maintain multiple environments on the same system and find the setup that works best. Follow the instructions below to setup a virtual environment.__*
+__Setting up a virtual environment is not mandatory but its prefereed as it makes the handling of required packages easy. Consider the case of having a fresh Ubuntu 20.04 install which boasts a python 3.8 integration by default. Installing a stable version of python is necessary. Virtual environments help us to maintain multiple environments on the same system and find the setup that works best. Follow the instructions below to setup a virtual environment:__
 
-1. Install the python3-dev and the python3-tk modules required for mothe using the following commands.
+1. Install python3-dev and python3-tk modules required for mothe using the following commands-
 
-*__sudo apt-get install python3-dev__*
+`$ sudo apt-get install python3-dev`
 
-*__sudo apt-get install python3-tk__*
+`$ sudo apt-get install python3-tk`
 
 *__If a new version of python is installed, ex: python3.6 along with the existing python3.8 stock install, the packages should be installed as follows__*
 
-*__sudo apt-get install python3.6-dev__*
+`$ sudo apt-get install python3.6-dev`
 
-*__sudo apt-get install python3.6-tk__*
+`$ sudo apt-get install python3.6-tk`
 
 2. Install virtualenv and virtualenvwrapper using the pip3 package manager
 
-*__sudo pip3 install virtualenv virtualenvwrapper__*
+`$ sudo pip3 install virtualenv virtualenvwrapper`
 
-3. Execute the following FOUR commands one after the other in the terminal to update the .bashrc file
+3. Execute the following FOUR commands one after the other in the terminal to update the `.bashrc` file
 
-*__echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc__*
+`$ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc`
+`$ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc`
+`$ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc`
+`$ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc`
 
-*__echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc__*
+4. After updating the `.bashrc` file, we need to source it to apply the changes using the following command
 
-*__echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc__*
+`$ source ~/.bashrc`
 
-*__echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc__*
+5. After setting up the virtualenv and virtualenvwrapper, create a virtualenv using the following command. Be aware of the python version used for creating this environment. Ex: If we have installed python3.6, copy the following command, replace version number with the python version on your system
 
-4. After updating the .bashrc file, we need to source it to apply the changes using the following command
-
-*__source ~/.bashrc__*
-
-5. After setting up the virtualenv and virtualenvwrapper, create a virtualenv using the following command. Be aware of the python version used for creating this environment. Ex: If we have installed python3.6, the version should be pointed towards python3.6
-
-*__mkvirtualenv mothe -p python3.6__*
+`$ mkvirtualenv mothe -p python3.6`
 
 6. After creating the virtual environment, we need to activate it before working on it. Activate the environment using the following command
 
-*__workon mothe__*
+`$ workon mothe`
 
 7. Once we are in the mothe virtual environment, install mothe using the pip package manager as shown below
 
-*__pip install mothe__*
+`$ pip install mothe`
 
-## PIPELINE DESCRIPTION:
 
-The 'mothe' library includes 5 methods that provide an end to end solution for tracking multiple objects in a heterogeneous environment. It includes methods to setup configuration, dataset generation, training the CNN, multiple object detection and object tracking.
 
-1. __set_config__: The system configuration is used to setup MOTHe on the users system. Basic details such as the path to the local repository, path to the video to be processed, the size of the individial to be cropped, number of frames to skip while running detection or tracking (to reduce compute time/to run a test case) and the size of the bounding box to be drawn during the detection phase.
+### MOTHe implementation 
 
-2. __generate_dataset__: The dataset generation is a crucial step towards object detection and tracking. The manual effort required to generate the required amount of training data is huge. The data generation class and executable highly automates the process by allowing the user to crop the region of interest by simple clicks over a GUI and automatically saves the images in appropriate folders.
+Users can run MOTHe to detect and track single or multiple individuals in the videos (or images). In this section, we describe the step-by-step procedure to run/test MOTHe. If you are interested in learning the procedure first by running it on our videos (and data), follow the guidelines under subsection **"Testing"** in each step.
 
-3. __train_model__: After generating sufficient number of training example, the data is used to train the neural network. The neural network produces a classifier as the output. The accuracy of the classifier is dependent on how well the network is trainied, which in turn depends on the quality and quantity of training data (See section "How much training data do I need?"). The various tuning parameters of the network are fixed to render the process easy for the users. This network works well for binary classification - object of interest (animals) and background. Multi-class classification is not supported on this pipeline.
+__The mouse callback functions of OPENCV depend on Tkinter module. Please install it by using the follwing command in the terminal__
 
-4. __detection__: This is the most crucial module in the repository. It performs two key tasks - it first identifies the regions in the image which can potentially have animals, this is called localisation; then it performs classification on the cropped regions. This classification is done using a small CNN (6 convolutional layers). Output is in the form of .csv files which contains the locations of the identified animals in each frame.
-
-5. __Object tracking__: Object tracking is the final goal of the MOTHe. This module assigns unique IDs to the detected individuals and generates their trajectories. We have separated detection and tracking modules, so that it can also be used by someone interested only in the count data (eg. surveys). This modularisation also provides flexibility of using more sophisticated tracking algorithms to the experienced programmers. We use an existing code for the tracking task (from the Github page of ref). This algorithm uses Kalman filters and Hungarian algorithm. This script can be run once the detections are generated in the previous step. Output is a \text{.csv} file which contains individual IDs and locations for each frame. A video output with the unique IDs on each individual is also 
-
-# MOTHE IMPLEMENTATION
-
-**_THE MOUSE CALLBACK FUNCTIONS OF OPEN-CV DEPENDS ON Tkinter MODULE. PLEASE INSTALL IT BY USING THE FOLLOWING COMMAND IN THE TERMINAL_**
-
-**_sudo apt-get install python3-tk python3-dev_**
+`$ sudo apt-get install python3-tk python3-dev`
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/1_create_mothe_directory.png">
 <br>
 
-Open the terminal and navigate to the desktop. Create a folder named "mothe" and navigate into this folder. Execute the following commands.
+Open the terminal and navigate to the desktop. Create a folder named "mothe" and navigate into this folder. Execute the following commands:
 
-**_cd Desktop_**
+`$ cd Desktop`
 
-**_mkdir mothe_**
+`$ mkdir mothe`
 
-**_cd mothe_**
+`$ cd mothe`
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/2_copy_video_to_mothe.png">
 <br>
 
-Copy your test video to the mothe folder to configure mothe settings. Also copy all the videos (multiple videos required for generating dataset, detection and tracking) to the mothe folder. This tutorial shows the working of the mothe library with just one test video.
+Copy your test video to the "mothe" folder to configure settings. Also, copy all the videos (multiple videos required for generating dataset, detection and tracking) to the mothe folder. This tutorial shows the working of the mothe library with just one test video. It is preferable to use a subset of videos covering a wide-variety of scenario (habita, lighting, groups etc.) for the training purpose.
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/3_pip3_install_mothe.png">
 <br>
 
-Install the mothe library using the pip3 package manager. In case you do not have pip3 installed, Execute the following command.
+Install the MOTHe library using the pip3 package manager (if not done already). In case you do not have pip3 installed, Execute the following command.
 
-**_sudo apt-get install python3-pip_**
+`$ sudo apt-get install python3-pip`
 
 Forego the previous step if you have pip3 installed. Execute the following command to install mothe.
 
-**_pip3 install mothe_**
+`$ pip3 install mothe`
 
-Incase you are facing trouble installing mothe or you get errors while using mothe, it is most likely attributed to the descripency of version of the modules used in mothe and modules instaled on your system. You can choose to setup a virtual environment at this point and only install mothe in this environment.
+If you are facing trouble installing MOTHe or you get errors while using MOTHe, it is most likely attributed to the descripency of version of the modules used in MOTHe and modules instaled on your system. You can choose to setup a virtual environment at this point and only install mothe in this environment (explained in the previous section).
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/4_post_successful_mothe_installation.png">
 <br>
 
-You will see the "successfully installed mothe" message if you have installed mothe with pip3 succesfully. Some warnings may appear for various reasons during this step. But as long as the mothe module can be imported in python, it is not a problem.
+You will see the "successfully installed mothe" message if you have installed mothe with pip3 successfully. Some warnings may appear for various reasons during this step. But as long as the mothe module can be imported in python, it is not a problem.
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/5_run_python3.png">
 <br>
 
-Run the python3 command in your terminal at this point to open the python shell. If you are in a new terminal, make sure you have navigated into the mothe folder before doing this.
+Run the python3 command in your terminal at this point to open the python shell. If you are in a new terminal, make sure you have navigated into the mothe folder and activated the virtual environment before doing this.
 
-**_python3_**
+`$ python3`
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/6_import_mothe.png">
 <br>
 
-In the python shell, import the mothe module by executing the following command. Some warnings may be printed after the import (generally something related to tensorflow and its compatibility with the GPU on the specific system). However, these warnings may be conviniently ignored.
+In the python shell, import the MOTHe module by executing the following command. Some warnings may be printed after the import (generally something related to tensorflow and its compatibility with the GPU on the specific system). However, these warnings may be ignored.
 
-**_from mothe.pipe import mothe_**
+`$ from mothe.pipe import mothe`
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/7_create_mothe_instance.png">
 <br>
 
-Create a mothe instance/object by initializing mothe using the following command. The min and max threshold values depends on the specific case study and maytake a few tril and error attempts to get right. For the black buck videos, we have chosen 0 and 150 as the min and max threshold values and 150 and 250 for the wasp videos.
+Now MOTHe library is successfully imported in our system and we can proceed with the methods associated with our object detection tasks.
 
-**_mothe = mothe("path/to/the/project/folder", min_threshold, max_threshold, step_size_for_detection_and_tracking)_**
+__Step 1: System configuration__
+
+This step is used to set parameters of MOTHe. All the parameters are saved in *config.yml*.
+Parameters to be set in this step - home directory, cropping size of animals in the videos, path to video files etc. 
+
+Create a mothe instance/object by initializing mothe using the following command. The min and max threshold values depends on the specific case study (contrast between animal and background) and may take a few trial and error attempts to get it right (Read section **Choosing color threshold** for more details). For the blackbuck videos, we have chosen 0 and 150 as the min and max threshold values and 150 and 250 for the wasp videos. You will also specify a step size (no. of frames to skip for detection and tracking task). If for any reason, you want to run the detection for every n frames instead of all the frames (it can spped up the detection task significantly).
+
+`$ mothe = mothe("path/to/the/project/folder", min_threshold, max_threshold, step_size_for_detection_and_tracking)`
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/8_set_configuration.png">
 <br>
 
-Set the configuration for mothe using the following command. Assuming that we are in the folder which we have named mothe (choice of the user), config.yml is generated in this directory.
+Set the configuration for mothe using the following command. Assuming that we are in the folder which we have named mothe (choice of the user), *config.yml* is generated in this directory.
 
-**_mothe.set_config("path/to/video")_**
+`$ mothe.set_config("path/to/video")`
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/9_window_appears.png">
@@ -159,30 +171,38 @@ A window appears during the configuration process which is a frame of the test v
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/10_drag_across_animal.png">
 <br>
 
-Click and drag across the animal to set the animal size fro the configuration.
+Click and drag across the animal to set the animal size for the configuration.
 
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/11_press_c_twice.png">
 <br>
 
-Press the 'c' button ones to view the cropped animal. If satisfied with the click and drag process, proceed to press the 'c' button again to confirm and end the configuration process.
+Press the **c** key once to view the cropped animal. If satisfied with the click and drag process, proceed to press the **c** key **again** to confirm and end the configuration process.
 
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/12_creates_config_file.png">
 <br>
 
-You can view and change the config.yml file created in the mothe folder later.
+You can view and change the *config.yml* file created in the mothe folder.
 
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/13_generate_dataset.png">
 <br>
 
-After the configuration process, initiate the data generation process by following the following command. Make sure to use multiple videos for data generation to accomodate variations and to produce enough examples. Mothe supports only binary classification. Therefore name the classes 'yes' for positive examples and 'no' for background examples. The data generation method takes a step size argument as well which helps the user to keep the number of examples per video in check. (Ex: a higher step size limits the number of frames per video. if a video is very long, one can set a higher step size to skip through unwated and consecutive frames.) 
+After the configuration process, initiate the data generation process using next step
 
-**_mothe.generate_dataset("path/to/video", "class_name")_**
+__Step 2: Data Generation__
+
+
+This program will pick frames from the videos, user can click on animals or background in these images to create samples for both categories (animal and background). Examples of animal of ineterst will be saved in the folder **yes** and background in the folder **no**.
+User needs to generate at least 8k-10k samples for each category (see section **How much training data do I need?** for detailed guidelines). One must ensure to take a wide representation of forms in which animals appears in the videos and same for the background variation.
+
+Mothe supports only binary classification. Therefore name the classes 'yes' for positive examples and 'no' for background examples. The data generation method takes a **step size** argument as well which helps the user to keep the number of examples per video in check. (Ex: a higher step size limits the number of frames per video. if a video is very long, one can set a higher step size to skip through unwated and consecutive frames.) 
+
+`$ mothe.generate_dataset("path/to/video", "class_name")`
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/14_window_appears.png">
@@ -194,7 +214,7 @@ A window appears which is a frame of the video you have chosen. Start generating
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/15_click_and_press_a.png">
 <br>
 
-Click at the center of the animal once. The algorithm calculates the size of the bounding box based on the config file entry. Press the 's' button ones to crop and store the animals once we have selected all the animals in the frame. Then it will take us to the next frame automatically. Press the 'n' button to proceed to the next frame if the current frame is not worth collecting data from. Any selected animals are not cropped and stored if 'n' key is pressed. It just takes us to the next frame. Press the 'u' button if you want to undo a perticular selection that you have made.
+Click at the center of the animal once. The algorithm calculates the size of the bounding box based on the config file entry. Press the **s** key once to crop and store the animals once we have selected all the animals in the frame. Then it will take us to the next frame automatically. Press the **n** key to proceed to the next frame if the current frame is not worth collecting data from. Any selected animals are not cropped and stored if **n** key is pressed. It just takes us to the next frame. Press the **u** key if you want to undo a perticular selection that you have made. Once you are done collectiong samples from a video, press **esc** key to complete the process for this video. You shall repeat this process for multiple videos to sample training examples as widely as possible.
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/16_creates_class_folder.png">
@@ -206,23 +226,29 @@ At this point, a class folder is created in the mothe folder which stores all an
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/17_starts_storing_data.png">
 <br>
 
-Data starts to get stored in the class folder
+Data starts to get stored in the class folder.
 
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/18_select_all_individuals.png">
 <br>
 
-Select all animals in every frame. Repeat this process for the 'no' class too. Select all background examples in this case. At this point you will have two class folder with many examples to train the neural network. The 'esc' key maybe used to end the process at any stage.
+Repeat this process for the 'no' class too. Select all background examples in this case. At this point you will have two class folder with many examples to train the neural network.
 
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/19_train_model.png">
 <br>
 
-Start training the neural network using the generated data by executing the following command.
+**For testing:**
+If you wish to test (learn how to run) this module, download our video clips from [here](https://figshare.com/s/82661a4fd39008fae445). You can then generate samples by choosing any of these videos. If you directly want to proceed to next steps, download our training data from the same drive.
 
-**_mothe.train_model()_**
+
+**Step 3: Training the CNN**
+
+ To train the neural network, run the following command in the python shell-
+ 
+`$ mothe.train_model()`
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/20_post_training_graphs.png">
@@ -234,31 +260,41 @@ After successfully training the model, two graphs appear on the screen. The loss
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/21_stores_model.png">
 <br>
 
-After training, the model gets stored in the mothe directory as 'mothe_model.h5py'. This model will be used to detect and track animals in the test videos.
+After training, the model gets stored in the mothe directory as *mothe_model.h5py*. This model will be used to detect and track animals in the test videos.
 
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/22_start_detection.png">
 <br>
 
-Initiate the detection process by using the following command. Make sure to enter the name of a test video and the correct model name as arguments. Please use the link provided below to use an already trained model. Rename the model and provide the same in the argument section of the detection method.
+**For testing -**
+You can completely skip this step if you want to run MOTHe on wasp or blackbuck videos. For these videos, trained models are already saved in the repository.
 
-**_mothe.detection("path/to/the/video/file", "path/to/the/trained/model")_**
+**Step 4: Object detection**
+
+This module will detect the animals (object of interest) in the video frames. As mentioned earlier, this process is done in two steps - first the code predicts the areas in which animal may be potentially present (localisation) and then these areas are passes to the network for classification task. For localisation, we need thrsholding approach which gives us regions which have animals as well as background noise.
+Initiate the detection process by using the following command. Make sure to enter the name of a test video and the correct model name as arguments. 
+You can use the already trained model availab;le in MOTHe Github repository to run detection on blackbuck or wasp videos. Rename the model and provide the same in the argument section of the detection method.
+
+`$ mothe.detection("path/to/the/video/file", "path/to/the/trained/model")`
 
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/23_stores_video_csv.png">
 <br>
 
-After the successful detection, a detection video and csv are generated in the mothe folder.
+After the successful detection, a detection video and *.csv* are generated in the mothe folder.
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/24_start_tracking.png">
 <br>
 
+**STep 5: Object tracking**
+This step is used to ascribe unique IDs to the detected animals and it gives us thetrajectoris of the animals. 
+It will use the detections from previous step. Hence, the input for this step would be original video clip and *.csv* generated in the previous step.
 Initiate the tracking process by using the following command. Make sure to enter the name of a test video and the correct model name as arguments. The model used here is the same model that is used by the detection step.
 
-**_mothe.tracking("path/to/the/video/file", "path/to/the/trained/model")_**
+`$ mothe.tracking("path/to/the/video/file", "path/to/the/trained/model")`
 
 
 <br>
@@ -284,7 +320,8 @@ Run the detection with these thresholds and you can improve the detection by hit
 2. You can compare your videos to wasp and blackbuck videos and start with threshold values to which your data is more similar. For example, if your animal looks more similar to blackbuck in color and lighting conditions, you may start with default thresholds and improve the detection by changing lower and upper threshold by little amount at a time.
 
 
-## USING ON WINDOWS
+## Instrictions for the implementation in WINDOWS
+
 Using windows to implement MOTHe is easier than the linux counterpart. There are TWO options for implementing with windows.
 
 1. Using an environment such as anaconda.
