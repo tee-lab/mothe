@@ -26,10 +26,17 @@ MOTHe is a python package which uses several other python libraries which might 
 1. Tensorflow: 2.1.0
 2. Keras: 2.3.1
 3. sklearn: 0.23.1
+4. opencv-python: 3.4.0
 
 __If the environment has the wrong versions installed, just reinstall the package using pip3 and specifying the correct versions as shown below.__
 
 `$ pip3 install tensorflow==2.1.0`
+
+or you can use the requirement.txt provided with the versions of modules that has been tested with mothe. Use the following command to install the right versions.
+
+`$ pip install -r requirement.txt`
+
+__ALL SCREENSHOTS AND WORKING STEPS ARE PROVIDED ASSUMING THAT A VIRTUAL ENVIRONMENT HAS BEEN CREATED BY THE USER__
 
 ### VIRTUAL ENVIRONMENT SETUP
 
@@ -53,9 +60,12 @@ __Setting up a virtual environment is not mandatory but its prefereed as it make
 
 3. Execute the following FOUR commands one after the other in the terminal to update the `.bashrc` file
 
-`$ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc`
-`$ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc`
-`$ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc`
+`$ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc
+`
+`$ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc
+`
+`$ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
+`
 `$ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc`
 
 4. After updating the `.bashrc` file, we need to source it to apply the changes using the following command
@@ -325,8 +335,34 @@ Run the detection with these thresholds and you can improve the detection by hit
 Using windows to implement MOTHe is easier than the linux counterpart. There are TWO options for implementing with windows.
 
 1. Using an environment such as anaconda.
-Anaconda helps in installing packages from the Pypi repository easily and also contains useful tools such as spyder(Text editor for python projects) and jupyter notebooks for experimenting with the Mothe library. Use the following link to download anaconda and get it up and running. It provides clear documentation on how to install pypi packages in the environment.
-*__https://docs.anaconda.com/anaconda/install/windows/_**
+Anaconda helps in installing packages from the Pypi repository easily and also contains useful tools such as spyder(Text editor for python projects) and jupyter notebooks for experimenting with the Mothe library.
+
+__STEP 1__
+
+Download the anaconda individual data science toolkit from the link provided below by clicking the DOWNLOAD button.
+*__https://www.anaconda.com/products/individual#windows__*
+
+__STEP 2__
+
+Go to the downloads folder where the anaconda installer is downloaded and double click on the installer. If there is some error, disable any antiviruses that maybe running in the background.
+
+__STEP 3__
+
+Click on the "NEXT" button after the installer opens up. Next click on the "I AGREE" button to aknowledge the terms and conditions.
+
+__STEP 4__
+
+Click on the "JUST ME" install option. Select a destination folder which does not contain any spaces or unicode charecters. Also, make sure to install without admin previlages since its just an individual user install. Do not add anaconda to the path variables. Instead it can be launched from the start menu. Choose the "Register anaconda3 as my default python".
+
+__STEP 5__
+
+Click the install button and finish the installation. Here pycharm can also be installed into the environment which is a useful python IDE. 
+
+__STEP 6__
+
+To install the "mothe" library, simply enter the conda shell and execute the following command.
+
+`$ conda install mothe`
 
 2. Installing python3 and pip package manager.
 Downloading and installing python3 and the pip package manager is the __recommended option__ since it is quick and easy for controlling the versions. Use the following links to download and install python3 and pip package manager.
@@ -343,6 +379,7 @@ Use the following command to install mothe
 1. Tensorflow: 2.1.0
 2. Keras: 2.3.1
 3. sklearn: 0.23.1
+4. opencv-python: 3.4.0
 *__If the environment has the wrong versions installed, just reinstall the package using pip3 and specifying the correct versions as shown below.__*
 
 *__pip3 install tensorflow==2.1.0__*
