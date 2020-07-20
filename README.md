@@ -17,7 +17,9 @@ MOTHe can automate all the tasks associated with object classification and is di
 
 5. __Object tracking__: Object tracking is the final goal of the MOTHe. This module assigns unique IDs to the detected individuals and generates their trajectories. We have separated detection and tracking modules, so that it can also be used by someone interested only in the count data (eg. surveys). This modularisation also provides flexibility of using more sophisticated tracking algorithms to the experienced programmers. We use an existing code for the tracking task (from the Github page of ref). This algorithm uses Kalman filters and Hungarian algorithm. This script can be run once the detections are generated in the previous step. Output is a \text{.csv} file which contains individual IDs and locations for each frame. A video output with the unique IDs on each individual is also generated.
 
-## Setting-up MOTHe on Linux
+# Pre-requisites and installations
+
+## LINUX
 
 ### IMPORTANT NOTE
 
@@ -60,12 +62,12 @@ __Setting up a virtual environment is not mandatory but its prefereed as it make
 
 3. Execute the following FOUR commands one after the other in the terminal to update the `.bashrc` file
 
-`$ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc
-`
-`$ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc
-`
-`$ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
-`
+`$ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc`
+
+`$ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc`
+
+`$ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc`
+
 `$ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc`
 
 4. After updating the `.bashrc` file, we need to source it to apply the changes using the following command
@@ -84,19 +86,72 @@ __Setting up a virtual environment is not mandatory but its prefereed as it make
 
 `$ pip install mothe`
 
-
-
-### MOTHe implementation 
-
-Users can run MOTHe to detect and track single or multiple individuals in the videos (or images). In this section, we describe the step-by-step procedure to run/test MOTHe. If you are interested in learning the procedure first by running it on our videos (and data), follow the guidelines under subsection **"Testing"** in each step.
-
-__The mouse callback functions of OPENCV depend on Tkinter module. Please install it by using the follwing command in the terminal__
+8. __The mouse callback functions of OPENCV depend on Tkinter module. Please install it by using the follwing command in the terminal__
 
 `$ sudo apt-get install python3-tk python3-dev`
 
 <br>
 <img height="350" src="https://github.com/tee-lab/mothe/blob/master/mothe_screenshots/1_create_mothe_directory.png">
 <br>
+
+## WINDOWS
+
+Using windows to implement MOTHe is easier than the linux counterpart. There are TWO options for implementing with windows.
+
+1. Using an environment such as anaconda.
+Anaconda helps in installing packages from the Pypi repository easily and also contains useful tools such as spyder(Text editor for python projects) and jupyter notebooks for experimenting with the Mothe library.
+
+__STEP 1__
+
+Download the anaconda individual data science toolkit from the link provided below by clicking the DOWNLOAD button.
+*__https://www.anaconda.com/products/individual#windows__*
+
+__STEP 2__
+
+Go to the downloads folder where the anaconda installer is downloaded and double click on the installer. If there is some error, disable any antiviruses that maybe running in the background.
+
+__STEP 3__
+
+Click on the "NEXT" button after the installer opens up. Next click on the "I AGREE" button to aknowledge the terms and conditions.
+
+__STEP 4__
+
+Click on the "JUST ME" install option. Select a destination folder which does not contain any spaces or unicode charecters. Also, make sure to install without admin previlages since its just an individual user install. Do not add anaconda to the path variables. Instead it can be launched from the start menu. Choose the "Register anaconda3 as my default python".
+
+__STEP 5__
+
+Click the install button and finish the installation. Here pycharm can also be installed into the environment which is a useful python IDE. 
+
+__STEP 6__
+
+To install the "mothe" library, simply enter the conda shell and execute the following command.
+
+`$ conda install mothe`
+
+2. Installing python3 and pip package manager.
+Downloading and installing python3 and the pip package manager is the __recommended option__ since it is quick and easy for controlling the versions. Use the following links to download and install python3 and pip package manager.
+*__https://www.python.org/downloads/windows/__*
+*__https://www.liquidweb.com/kb/install-pip-windows/__*
+
+3. Install mothe using the pip package manager
+Use the following command to install mothe
+*__pip3 install mothe__* / *__pip install mothe__*
+(Depending on whether we are in a virtualenv or on system)
+
+*__WARNING: MOTHe uses several methods which have either been moved or changed. It is important to be aware of the versions that we download/install. The recommended python versions are the python3.6 to python3.7 stable releases. Python3.8 does not support Tensorflow versions below the 2.2 releases which are required by MOTHe to work. Please note the versions of some libraries that are modified rather quickly and are used to test MOTHe very recently.__*
+
+1. Tensorflow: 2.1.0
+2. Keras: 2.3.1
+3. sklearn: 0.23.1
+4. opencv-python: 3.4.0
+*__If the environment has the wrong versions installed, just reinstall the package using pip3 and specifying the correct versions as shown below.__*
+
+*__pip3 install tensorflow==2.1.0__*
+
+
+## MOTHe implementation 
+
+Users can run MOTHe to detect and track single or multiple individuals in the videos (or images). In this section, we describe the step-by-step procedure to run/test MOTHe. If you are interested in learning the procedure first by running it on our videos (and data), follow the guidelines under subsection **"Testing"** in each step.
 
 Open the terminal and navigate to the desktop. Create a folder named "mothe" and navigate into this folder. Execute the following commands:
 
@@ -330,57 +385,6 @@ Run the detection with these thresholds and you can improve the detection by hit
 2. You can compare your videos to wasp and blackbuck videos and start with threshold values to which your data is more similar. For example, if your animal looks more similar to blackbuck in color and lighting conditions, you may start with default thresholds and improve the detection by changing lower and upper threshold by little amount at a time.
 
 
-## Instrictions for the implementation in WINDOWS
 
-Using windows to implement MOTHe is easier than the linux counterpart. There are TWO options for implementing with windows.
 
-1. Using an environment such as anaconda.
-Anaconda helps in installing packages from the Pypi repository easily and also contains useful tools such as spyder(Text editor for python projects) and jupyter notebooks for experimenting with the Mothe library.
-
-__STEP 1__
-
-Download the anaconda individual data science toolkit from the link provided below by clicking the DOWNLOAD button.
-*__https://www.anaconda.com/products/individual#windows__*
-
-__STEP 2__
-
-Go to the downloads folder where the anaconda installer is downloaded and double click on the installer. If there is some error, disable any antiviruses that maybe running in the background.
-
-__STEP 3__
-
-Click on the "NEXT" button after the installer opens up. Next click on the "I AGREE" button to aknowledge the terms and conditions.
-
-__STEP 4__
-
-Click on the "JUST ME" install option. Select a destination folder which does not contain any spaces or unicode charecters. Also, make sure to install without admin previlages since its just an individual user install. Do not add anaconda to the path variables. Instead it can be launched from the start menu. Choose the "Register anaconda3 as my default python".
-
-__STEP 5__
-
-Click the install button and finish the installation. Here pycharm can also be installed into the environment which is a useful python IDE. 
-
-__STEP 6__
-
-To install the "mothe" library, simply enter the conda shell and execute the following command.
-
-`$ conda install mothe`
-
-2. Installing python3 and pip package manager.
-Downloading and installing python3 and the pip package manager is the __recommended option__ since it is quick and easy for controlling the versions. Use the following links to download and install python3 and pip package manager.
-*__https://www.python.org/downloads/windows/__*
-*__https://www.liquidweb.com/kb/install-pip-windows/__*
-
-3. Install mothe using the pip package manager
-Use the following command to install mothe
-*__pip3 install mothe__* / *__pip install mothe__*
-(Depending on whether we are in a virtualenv or on system)
-
-*__WARNING: MOTHe uses several methods which have either been moved or changed. It is important to be aware of the versions that we download/install. The recommended python versions are the python3.6 to python3.7 stable releases. Python3.8 does not support Tensorflow versions below the 2.2 releases which are required by MOTHe to work. Please note the versions of some libraries that are modified rather quickly and are used to test MOTHe very recently.__*
-
-1. Tensorflow: 2.1.0
-2. Keras: 2.3.1
-3. sklearn: 0.23.1
-4. opencv-python: 3.4.0
-*__If the environment has the wrong versions installed, just reinstall the package using pip3 and specifying the correct versions as shown below.__*
-
-*__pip3 install tensorflow==2.1.0__*
 
