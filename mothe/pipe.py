@@ -799,7 +799,7 @@ class mothe:
         with open("config.yml", "r") as stream:
             config_data= yaml.safe_load(stream)
         path = config_data["root_dir"]
-        grab_size = int(config_data["annotation_size"])
+        grab_size = int(config_data["annotation_size"]/2)
         ix, iy = -1, -1
         def click_crop(event, x, y, flags, param):
             global ix, iy
@@ -839,7 +839,7 @@ class mothe:
                         print(keypoints)
                         clone = frame.copy()
                         for point in keypoints:
-                            cv2.rectangle(clone, (point[0]-(round(grab_size/2)+1), point[1]-(round(grab_size/2)+1)), (point[0]+(round(grab_size/2)+1), point[1]+(round(grab_size/2)+1)), (0, 255, 0), 2)
+                            cv2.rectangle(clone, (point[0]-grab_size, point[1]-grab_size), (point[0]+grab_size, point[1]+grab_size), (0, 255, 0), 2)
 
                 elif key == 27:
                     i = (nframes)
@@ -852,7 +852,7 @@ class mothe:
                         cv2.imwrite(path + "/" + self.class_name + "/" + "{}-{}-f{}-k{}.jpg".format(self.movie_name, self.class_name, i, enum), crop_img)
                     break
                 for point in keypoints:
-                    cv2.rectangle(clone, (point[0]-(round(grab_size/2)+1), point[1]-(round(grab_size/2)+1)), (point[0]+(round(grab_size/2)+1), point[1]+(round(grab_size)/2)+1), (0, 255, 0), 2)
+                    cv2.rectangle(clone, (point[0]-grab_size, point[1]-grab_size), (point[0]+grab_size, point[1]+grab_size), (0, 255, 0), 2)
             cv2.destroyAllWindows()
 
     
