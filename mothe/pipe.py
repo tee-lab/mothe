@@ -839,7 +839,8 @@ class mothe:
                         print(keypoints)
                         clone = frame.copy()
                         for point in keypoints:
-                            cv2.circle(clone, point, grab_size, (0, 255, 0), 2)
+                            cv2.rectangle(clone, (point[0]-grab_size, point[1]-grab_size), (point[0]+grab_size, point[1]+grab_size), (0, 255, 0), 2)
+
                 elif key == 27:
                     i = (nframes)
                     print("...GENERATION TERMINATED...")
@@ -851,7 +852,7 @@ class mothe:
                         cv2.imwrite(path + "/" + self.class_name + "/" + "{}-{}-f{}-k{}.jpg".format(self.movie_name, self.class_name, i, enum), crop_img)
                     break
                 for point in keypoints:
-                    cv2.circle(clone, point, grab_size, (0, 255, 0), 2)
+                    cv2.rectangle(clone, (point[0]-grab_size, point[1]-grab_size), (point[0]+grab_size, point[1]+grab_size), (0, 255, 0), 2)
             cv2.destroyAllWindows()
 
     
@@ -869,8 +870,8 @@ class mothe:
 
 if __name__=="__main__":
     mothe = mothe("/home/elcucuy/mothe/mothe", 50, 150, 15)
-    # configuration = mothe.set_config("/wasp_original.MTS")
-    # mothe.generate_dataset("wasp_original.MTS", "yes", 15)
+    configuration = mothe.set_config("wasp_original.MTS")
+    mothe.generate_dataset("wasp_original.MTS", "yes", 15)
     # mothe.train_model()
-    mothe.detection("wasp_original.MTS", "wasp_model.h5py")
-    mothe.tracking("wasp_original.MTS", "wasp_model.h5py")
+    # mothe.detection("wasp_original.MTS", "wasp_model.h5py")
+    # mothe.tracking("wasp_original.MTS", "wasp_model.h5py")
