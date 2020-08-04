@@ -237,7 +237,7 @@ class mothe:
         with open("config.yml", "r") as stream:
             config_data= yaml.safe_load(stream)
         path = config_data["root_dir"]
-        grabsize = (int(config_data["annotation_size"])/2)
+        grabsize = int((config_data["annotation_size"])/2)
         threshold_value1 = (int(config_data["threshold_value1"]))
         threshold_value2 = (int(config_data["threshold_value2"]))
         steps = (int(config_data["step_for_dt"]))
@@ -627,7 +627,7 @@ class mothe:
         with open("config.yml", "r") as stream:
             config_data= yaml.safe_load(stream)
         root_dir = config_data["root_dir"]
-        grabsize = (int(config_data["annotation_size"])/2)
+        grabsize = int((config_data["annotation_size"])/2)
         threshold_value1 = (int(config_data["threshold_value1"]))
         threshold_value2 = (int(config_data["threshold_value2"]))
         steps = int(config_data["step_for_dt"])
