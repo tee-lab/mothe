@@ -1,8 +1,8 @@
 ## MOTHe
+
+** This repository is the backend library of our GUI based app - [MOTHe-GUI](https://github.com/tee-lab/MOTHe-GUI) ** 
+
 Mothe is a PYPI library to detect and track multiple animals in a heterogeneous environment. MOTHe is a python based repository and it uses Convolutional Neural Network (CNN) architecture for the object detection task. It takes a digital image as an input and reads its features to assign a category. These algorithms are learning algorithms which means that they extract features from the images by using huge amounts of labeled training data. Once the CNN models are trained, these models can be used to classify novel data (images). MOTHe is designed to be generic which empowers the user to track objects of interest even in a natural setting.
-
-This repository is the backend library of our GUI based app - [MOTHe-GUI](https://github.com/tee-lab/MOTHe-GUI) 
-
 
 ## PIPELINE DESCRIPTION:
 
