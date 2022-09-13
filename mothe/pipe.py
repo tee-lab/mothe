@@ -17,11 +17,11 @@ from keras.layers import Dense
 from keras.utils import to_categorical
 import matplotlib.pyplot as plt
 import keras
-from keras import Sequential,Input,Model
+from keras.models import Sequential,Input,Model
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
-from keras.layers import BatchNormalization
-from keras.layers import LeakyReLU
+from keras.layers.normalization import BatchNormalization
+from keras.layers.advanced_activations import LeakyReLU
 import scipy
 from scipy.optimize import linear_sum_assignment
 import glob
